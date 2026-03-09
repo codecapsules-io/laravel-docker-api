@@ -13,7 +13,9 @@ RUN docker-php-ext-configure opcache --enable-opcache && \
 
 COPY --from=build /app /var/www/html
 
-RUN php artisan config:cache && \
+RUN cp /var/www/html/.env.example /var/www/html/.env && \
+    php artisan key:generate --force && \
+    php artisan config:cache && \
     php artisan route:cache && \
     chmod 777 -R /var/www/html/storage/ && \
     chown -R www-data:www-data /var/www/
